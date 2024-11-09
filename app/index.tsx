@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { images } from '@/constants';
 import CustomBotton from '@/components/CustomBotton';
+import 'react-native-url-polyfill/auto'
 
 
 

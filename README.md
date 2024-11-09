@@ -1,50 +1,41 @@
-# Welcome to your Expo app 👋
+code
+```javascript
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { Client, Account, ID, Models } from 'react-native-appwrite';
+import React, { useState } from 'react';
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+let client: Client;
+let account: Account;
 
-## Get started
+client = new Client();
+client
+  .setEndpoint('https://cloud.appwrite.io/v1')
+.setProject('672f1c0e002f06b926d7')
+.setPlatform('com.way.aura');
 
-1. Install dependencies
+account = new Account(client);
+export default function App() {
+  const [loggedInUser, setLoggedInUser] = useState<Models.User<Models.Preferences> | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
 
-   ```bash
-   npm install
-   ```
+  async function login(email: string, password: string) {
+    await account.createEmailPasswordSession(email, password);
+    setLoggedInUser(await account.get());
+  }
 
-2. Start the app
+  async function register(email: string, password: string, name: string) {
+    await account.create(ID.unique(), email, password, name);
+    await login(email, password);
+    setLoggedInUser(await account.get());
+  }
+  // return (
+  //   // ... Implement your UI here
+  // );
+}
 
-   ```bash
-    npx expo start
-   ```
 
-In the output, you'll find options to open the app in a
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
 ```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
